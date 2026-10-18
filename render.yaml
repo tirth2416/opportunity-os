@@ -1,0 +1,35 @@
+services:
+  - type: web
+    name: opportunityos-backend
+    runtime: python
+    plan: starter
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    disk:
+      name: opportunityos-data
+      mountPath: /var/data
+      sizeGB: 1
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.11
+      - key: DATABASE_PATH
+        value: /var/data/profiles.db
+      - key: CORS_ORIGINS
+        value: https://opportunityos-frontend.onrender.com
+      - key: RAPIDAPI_KEY
+        sync: false
+
+  - type: web
+    name: opportunityos-frontend
+    runtime: node
+    plan: starter
+    rootDir: frontend
+    buildCommand: npm ci && npm run build
+    startCommand: npm run start -- --hostname 0.0.0.0 --port $PORT
+    envVars:
+      - key: NODE_VERSION
+        value: 22
+      - key: NEXT_PUBLIC_API_URL
+        value: https://opportunityos-backend.onrender.com
