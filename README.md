@@ -6,7 +6,7 @@ keyword-based and does not use an LLM. A shared development profile ID
 (`student001`) is used until authentication is added.
 
 ## Local setup
-
+    
 ### Backend
 
 ```bash
